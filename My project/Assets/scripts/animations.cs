@@ -35,6 +35,8 @@ public class animations : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Mouse0)){
             isAttackPressed = true;
         }
+
+
     }
 
     void FixedUpdate(){
@@ -42,10 +44,12 @@ public class animations : MonoBehaviour
 
         //right left movement
         if(xAxis < 0){
-            vel.x = -walkSpeed;
+            vel.x =  -walkSpeed;
+            //vel.x = xAxis * -walkSpeed;
             transform.localScale = new Vector2(1, 1);
         }else if(xAxis > 0 ){
-            vel.x = walkSpeed;
+            vel.x =walkSpeed;
+            //vel.x =xAxis * walkSpeed;
             transform.localScale = new Vector2(-1, 1); 
         }else{
             vel.x = 0;
