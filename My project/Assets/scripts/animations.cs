@@ -5,7 +5,7 @@ using UnityEngine;
 public class animations : MonoBehaviour
 {
     [SerializeField]
-    private float walkSpeed = 0.3f;
+    private float walkSpeed = 1f;
 
     private Animator animator;
 
@@ -43,10 +43,10 @@ public class animations : MonoBehaviour
         //right left movement
         if(xAxis < 0){
             vel.x = -walkSpeed;
-            transform.localScale = new Vector2(-1, 1);
+            transform.localScale = new Vector2(1, 1);
         }else if(xAxis > 0 ){
             vel.x = walkSpeed;
-            transform.localScale = new Vector2(1, 1); 
+            transform.localScale = new Vector2(-1, 1); 
         }else{
             vel.x = 0;
         }
