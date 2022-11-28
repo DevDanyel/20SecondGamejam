@@ -51,11 +51,15 @@ public class animations : MonoBehaviour
             vel.x = 0;
         }
 
-        if(xAxis != 0){
-            ChangeAnimationState(Player_Walking);
-        }else{
-            ChangeAnimationState(Player_Idle);
+        if(!isAttacking){
+            if(xAxis != 0){
+                ChangeAnimationState(Player_Walking);
+            }else{
+                ChangeAnimationState(Player_Idle);
+            }
         }
+
+        
 
         //attack
         if(isAttackPressed){
@@ -63,8 +67,15 @@ public class animations : MonoBehaviour
 
             if(!isAttacking){
                 isAttacking = true;
+                ChangeAnimationState(Player_Swing);
+                //attackDelay = animator.GetCurrentAnimatorStateInfo(0).length;
+                Invoke("AttackComplete", attackDelay);
             }
         }
+    }
+
+    void AttackComplete(){
+        isAttacking = false;
     }
 
     void ChangeAnimationState(string newState){
