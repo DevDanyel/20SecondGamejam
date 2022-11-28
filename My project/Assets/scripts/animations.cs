@@ -13,7 +13,7 @@ public class animations : MonoBehaviour
     private Rigidbody2D rb2d;
     private string currAnim;
     private bool isAttackPressed;
-    private bool isattacking;
+    private bool isAttacking;
 
     [SerializeField]
     private float attackDelay = 0.3f;
@@ -40,6 +40,7 @@ public class animations : MonoBehaviour
     void FixedUpdate(){
         Vector2 vel = new Vector2(0, rb2d.velocity.y);
 
+        //right left movement
         if(xAxis < 0){
             vel.x = -walkSpeed;
             transform.localScale = new Vector2(-1, 1);
@@ -49,6 +50,32 @@ public class animations : MonoBehaviour
         }else{
             vel.x = 0;
         }
+
+        if(xAxis != 0){
+            ChangeAnimationState(Player_Walking);
+        }else{
+            ChangeAnimationState(Player_Idle);
+        }
+
+        //attack
+        if(isAttackPressed){
+            isAttackPressed = false;
+
+            if(!isAttacking){
+                isAttacking = true;
+            }
+        }
+    }
+
+    void ChangeAnimationState(string newState){
+        //stop animation from interupting itself
+        if(currAnim == newState) return;
+
+        //play anim
+        animator.Play(newState);
+
+        //reassign curranim
+        currAnim = newState;
     }
    
 }
