@@ -10,9 +10,8 @@ public class EnemyManager : MonoBehaviour
     private Vector2 target;
     private Vector2 position;
     private GameObject player;
-    //private Animator animator;
+    private Animator animator;
 
-    private float xAxis;
     private Rigidbody2D rb2d;
     private string currAnim;
     private bool isAttackPressed;
@@ -23,17 +22,13 @@ public class EnemyManager : MonoBehaviour
     private float attackDelay = 0.3f;
 
     //animation states 
-    const string Player_Idle = "idle_1";
-    const string Player_Swing = "swing_1";
-    const string Player_Walking = "walking";
-
-    private void Awake() {
-        rb2d = GetComponent<Rigidbody2D>();
-    }
+    const string Player_Idle = "enemyAnimator";
+    const string Player_Swing = "swingE";
+    const string Player_Walking = "walkE";
 
     void Start(){
-        //ChangeAnimationState(Player_Idle);
-        //animator = GetComponent<Animator>();
+        rb2d = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         position = gameObject.transform.position;
         player = GameObject.FindGameObjectWithTag("Player");
         target = player.transform.position;
@@ -47,14 +42,26 @@ public class EnemyManager : MonoBehaviour
         //right left movement
 
 
+
         //if enemy is so close to player swing. 
+    }
+
+    void FixedUpdate(){
+        Vector2 vel = new Vector2(0, rb2d.velocity.y);
+
+        if(rb2d.velocity.magnitude != 0){
+            ChangeAnimationState(Player_Walking);
+        }else{
+            ChangeAnimationState(Player_Idle);
+        }
+
     }
 
 
     void AttackComplete(){
         isAttacking = false;
     }
-/*
+
     void ChangeAnimationState(string newState){
         //stop animation from interupting itself
         if(currAnim == newState) return;
@@ -64,5 +71,5 @@ public class EnemyManager : MonoBehaviour
 
         //reassign curranim
         currAnim = newState;
-    }*/
+    }
 }
