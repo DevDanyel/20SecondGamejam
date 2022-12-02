@@ -49,10 +49,23 @@ public class EnemyManager : MonoBehaviour
     void FixedUpdate(){
         Vector2 vel = new Vector2(0, rb2d.velocity.y);
 
-        if(rb2d.velocity.magnitude != 0){
-            ChangeAnimationState(Player_Walking);
-        }else{
-            ChangeAnimationState(Player_Idle);
+        if(!isAttacking){
+            if(rb2d.velocity.magnitude != 0){
+                ChangeAnimationState(Player_Walking);
+            }else{
+                ChangeAnimationState(Player_Idle);
+            }
+        }
+
+        if(isAttackPressed){
+            isAttackPressed = false;
+
+            if(!isAttacking){
+                isAttacking = true;
+                ChangeAnimationState(Player_Swing);
+                //attackDelay = animator.GetCurrentAnimatorStateInfo(0).length;
+                Invoke("AttackComplete", attackDelay);
+            }
         }
 
     }
@@ -71,5 +84,12 @@ public class EnemyManager : MonoBehaviour
 
         //reassign curranim
         currAnim = newState;
+    }
+
+    private void OnCollisionStay2D(Collision2D other) {
+        if(other.gameObject.CompareTag("Player")){
+            Debug.Log("hit player");
+            isAttackPressed = true;
+        }
     }
 }
