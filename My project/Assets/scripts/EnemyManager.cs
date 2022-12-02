@@ -21,6 +21,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     private float attackDelay = 0.3f;
 
+    //public ParticleSystem deadAnim;
+
     //animation states 
     const string Player_Idle = "enemyAnimator";
     const string Player_Swing = "swingE";
@@ -88,7 +90,6 @@ public class EnemyManager : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other) {
         if(other.gameObject.CompareTag("Player")){
-            Debug.Log("hit player");
             isAttackPressed = true;
         }
     }
