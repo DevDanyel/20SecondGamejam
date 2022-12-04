@@ -23,6 +23,8 @@ public class animations : MonoBehaviour
     const string Player_Swing = "swing_1";
     const string Player_Walking = "walking";
 
+
+
     void Start(){
         rb2d = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -92,5 +94,6 @@ public class animations : MonoBehaviour
         //reassign curranim
         currAnim = newState;
     }
+
    
 }

@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
 
+
     [SerializeField] private string tagName;
+
+
 
     public Image P2HealthBar;
     //public GameManager gm;
@@ -14,6 +17,10 @@ public class HealthBar : MonoBehaviour
     public float maxHealth = 30;
     public float P2Health;
 
+    //player objects;
+    public GameObject[] bodyParts;
+
+    //script references
     void Start(){
         P2Health = maxHealth;
         P2HealthBar.fillAmount = 1;
@@ -36,7 +43,15 @@ public class HealthBar : MonoBehaviour
         }*/
 
         if(P2Health == 0){
-            Debug.Log("Deady dead dead dead");
+            DeactivateBody();
+            if(GetComponent<EnemyManager>()){
+                GetComponent<EnemyManager>().enabled = false;
+            }else if(GetComponent<PlayerMovement>()){
+                GetComponent<PlayerMovement>().enabled = false;
+            }else{
+                Debug.Log("no script found");
+                
+            }
             //gm.EndGame();
             //gm.RestartScore();
         }
@@ -49,7 +64,15 @@ public class HealthBar : MonoBehaviour
         }
     }
 
+    void DeactivateBody(){
+        foreach (GameObject parts in bodyParts)
+        {
+            parts.active = false;   
+        }
 
-    
+    }
+
+
+
 
 }
