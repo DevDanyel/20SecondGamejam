@@ -7,6 +7,8 @@ public class HealthBar : MonoBehaviour
 {
 
 
+    //private IEnumerator PlayAnim;
+    public GameObject poofAnim;
     [SerializeField] private string tagName;
 
 
@@ -24,6 +26,7 @@ public class HealthBar : MonoBehaviour
     void Start(){
         P2Health = maxHealth;
         P2HealthBar.fillAmount = 1;
+        poofAnim.active = false;
     }
 
     public void LoseHealth(float hitPower){
@@ -35,12 +38,16 @@ public class HealthBar : MonoBehaviour
         P2HealthBar.fillAmount = CHealth / mHealth;
     }
 
+    
+
+    private IEnumerator PlayAnim(){
+        poofAnim.active = true;
+        yield return new WaitForSeconds(.3f);
+        poofAnim.active = false;
+    }
+
     void Update(){
         
-      /*if(Input.GetKeyDown(KeyCode.Space)){
-            LoseHealth(3);
-            UpdateHealth(maxHealth, P2Health);
-        }*/
 
         if(P2Health == 0){
             DeactivateBody();
@@ -50,10 +57,8 @@ public class HealthBar : MonoBehaviour
                 GetComponent<PlayerMovement>().enabled = false;
             }else{
                 Debug.Log("no script found");
-                
             }
-            //gm.EndGame();
-            //gm.RestartScore();
+            StartCoroutine("PlayAnim");
         }
     }
 
@@ -71,6 +76,7 @@ public class HealthBar : MonoBehaviour
         }
 
     }
+
 
 
 
