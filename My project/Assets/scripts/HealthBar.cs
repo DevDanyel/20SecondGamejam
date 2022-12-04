@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class HealthBar : MonoBehaviour
 {
 
 
+    public AudioSource punchSound;
+
     //private IEnumerator PlayAnim;
     public GameObject poofAnim;
     [SerializeField] private string tagName;
+    public TextMeshProUGUI gmOverText;
 
 
 
@@ -27,6 +31,14 @@ public class HealthBar : MonoBehaviour
         P2Health = maxHealth;
         P2HealthBar.fillAmount = 1;
         poofAnim.active = false;
+        if(GetComponent<EnemyManager>()){
+            GetComponent<EnemyManager>().enabled = false;
+        }else if(GetComponent<PlayerMovement>()){
+            GetComponent<PlayerMovement>().enabled = false;
+        }else{
+            Debug.Log("no script found");
+        }
+        gmOverText.text = "";
     }
 
     public void LoseHealth(float hitPower){
@@ -41,8 +53,7 @@ public class HealthBar : MonoBehaviour
     
 
     private IEnumerator PlayAnim(){
-        poofAnim.active = true;
-        yield return new WaitForSeconds(.3f);
+        yield return new WaitForSeconds(.5f);
         poofAnim.active = false;
     }
 
@@ -51,14 +62,19 @@ public class HealthBar : MonoBehaviour
 
         if(P2Health == 0){
             DeactivateBody();
+            
             if(GetComponent<EnemyManager>()){
                 GetComponent<EnemyManager>().enabled = false;
+                gmOverText.text = "You Win";
             }else if(GetComponent<PlayerMovement>()){
                 GetComponent<PlayerMovement>().enabled = false;
+                gmOverText.text = "You Lose";
             }else{
                 Debug.Log("no script found");
             }
+            poofAnim.active = true;
             StartCoroutine("PlayAnim");
+            P2Health = .1f;
         }
     }
 
@@ -66,6 +82,7 @@ public class HealthBar : MonoBehaviour
         if(other.CompareTag(tagName)){
             LoseHealth(3);
             UpdateHealth(maxHealth, P2Health);
+            punchSound.Play(0);
         }
     }
 
@@ -77,6 +94,16 @@ public class HealthBar : MonoBehaviour
 
     }
 
+    public void StartGame(){
+        if(GetComponent<EnemyManager>()){
+            GetComponent<EnemyManager>().enabled = true;
+        }else if(GetComponent<PlayerMovement>()){
+            GetComponent<PlayerMovement>().enabled = true;
+        }else{
+            Debug.Log("no script found");
+        }
+        
+    }
 
 
 
