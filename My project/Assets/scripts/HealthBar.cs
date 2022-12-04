@@ -9,6 +9,7 @@ public class HealthBar : MonoBehaviour
 
 
     public AudioSource punchSound;
+    public AudioSource poofSound;
 
     //private IEnumerator PlayAnim;
     public GameObject poofAnim;
@@ -62,7 +63,7 @@ public class HealthBar : MonoBehaviour
 
         if(P2Health == 0){
             DeactivateBody();
-            
+            poofSound.Play(0);
             if(GetComponent<EnemyManager>()){
                 GetComponent<EnemyManager>().enabled = false;
                 gmOverText.text = "You Win";
