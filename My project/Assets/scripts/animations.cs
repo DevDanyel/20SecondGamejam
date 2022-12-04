@@ -22,6 +22,7 @@ public class animations : MonoBehaviour
     const string Player_Idle = "idle_1";
     const string Player_Swing = "swing_1";
     const string Player_Walking = "walking";
+    
 
 
 

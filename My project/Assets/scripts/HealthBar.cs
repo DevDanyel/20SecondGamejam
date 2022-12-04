@@ -10,25 +10,31 @@ public class HealthBar : MonoBehaviour
 
     public AudioSource punchSound;
     public AudioSource poofSound;
+    private Vector2 startPos;
 
     //private IEnumerator PlayAnim;
     public GameObject poofAnim;
     [SerializeField] private string tagName;
     public TextMeshProUGUI gmOverText;
 
+    public GameObject playbutton;
+    public GameObject restartbutton;
 
+    public ParticleSystem floofPartcles;
 
     public Image P2HealthBar;
-    //public GameManager gm;
 
     public float maxHealth = 30;
     public float P2Health;
+    public InputField inputName;
+    public TextMeshProUGUI playerName;
 
     //player objects;
     public GameObject[] bodyParts;
 
     //script references
     void Start(){
+        startPos = transform.position;
         P2Health = maxHealth;
         P2HealthBar.fillAmount = 1;
         poofAnim.active = false;
@@ -40,6 +46,8 @@ public class HealthBar : MonoBehaviour
             Debug.Log("no script found");
         }
         gmOverText.text = "";
+        restartbutton.active = false;
+        inputName.text = "Enter Name";
     }
 
     public void LoseHealth(float hitPower){
@@ -62,21 +70,32 @@ public class HealthBar : MonoBehaviour
         
 
         if(P2Health == 0){
-            DeactivateBody();
-            poofSound.Play(0);
-            if(GetComponent<EnemyManager>()){
-                GetComponent<EnemyManager>().enabled = false;
-                gmOverText.text = "You Win";
-            }else if(GetComponent<PlayerMovement>()){
-                GetComponent<PlayerMovement>().enabled = false;
-                gmOverText.text = "You Lose";
-            }else{
-                Debug.Log("no script found");
-            }
-            poofAnim.active = true;
-            StartCoroutine("PlayAnim");
-            P2Health = .1f;
+            GameOver();
         }
+        
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            Pause();
+            playbutton.active = true;
+        }
+    }
+
+    public void GameOver(){
+        DeactivateBody();
+        poofSound.Play(0);
+        if(GetComponent<EnemyManager>()){
+            GetComponent<EnemyManager>().enabled = false;
+            gmOverText.text = "You Win";
+        }else if(GetComponent<PlayerMovement>()){
+            GetComponent<PlayerMovement>().enabled = false;
+            gmOverText.text = "You Lose";
+        }else{
+            Debug.Log("no script found");
+        }
+        poofAnim.active = true;
+        StartCoroutine("PlayAnim");
+        P2Health = .1f;
+        //make restart button show up
+        restartbutton.active = true;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -84,6 +103,7 @@ public class HealthBar : MonoBehaviour
             LoseHealth(3);
             UpdateHealth(maxHealth, P2Health);
             punchSound.Play(0);
+            floofPartcles.Play();
         }
     }
 
@@ -91,6 +111,14 @@ public class HealthBar : MonoBehaviour
         foreach (GameObject parts in bodyParts)
         {
             parts.active = false;   
+        }
+
+    }
+
+    void ReactivateBody(){
+        foreach (GameObject parts in bodyParts)
+        {
+            parts.active = true;   
         }
 
     }
@@ -103,6 +131,37 @@ public class HealthBar : MonoBehaviour
         }else{
             Debug.Log("no script found");
         }
+        
+    }
+
+    public void Pause(){
+        if(GetComponent<EnemyManager>()){
+            GetComponent<EnemyManager>().enabled = false;
+        }else if(GetComponent<PlayerMovement>()){
+            GetComponent<PlayerMovement>().enabled = false;
+        }else{
+            Debug.Log("no script found");
+        }
+    }
+
+    public void RestartGame(){
+        ReactivateBody();
+        P2Health = maxHealth;
+        P2HealthBar.fillAmount = 1;
+        poofAnim.active = false;
+        if(GetComponent<EnemyManager>()){
+            GetComponent<EnemyManager>().enabled = false;
+        }else if(GetComponent<PlayerMovement>()){
+            GetComponent<PlayerMovement>().enabled = false;
+        }else{
+            Debug.Log("no script found");
+        }
+        gmOverText.text = "";
+        transform.position = startPos; 
+        playbutton.active = true; 
+    }
+
+    public void BeforeStart(){
         
     }
 
