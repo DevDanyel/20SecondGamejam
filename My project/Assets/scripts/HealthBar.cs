@@ -10,6 +10,7 @@ public class HealthBar : MonoBehaviour
 
     public AudioSource punchSound;
     public AudioSource poofSound;
+    public AudioSource fightSound;
     private Vector2 startPos;
 
     //private IEnumerator PlayAnim;
@@ -19,6 +20,7 @@ public class HealthBar : MonoBehaviour
 
     public GameObject playbutton;
     public GameObject restartbutton;
+    public GameObject inpufField;
 
     public ParticleSystem floofPartcles;
 
@@ -26,7 +28,7 @@ public class HealthBar : MonoBehaviour
 
     public float maxHealth = 30;
     public float P2Health;
-    public InputField inputName;
+    public TextMeshProUGUI inputName;
     public TextMeshProUGUI playerName;
 
     //player objects;
@@ -96,6 +98,7 @@ public class HealthBar : MonoBehaviour
         P2Health = .1f;
         //make restart button show up
         restartbutton.active = true;
+
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -124,6 +127,15 @@ public class HealthBar : MonoBehaviour
     }
 
     public void StartGame(){
+        //could put in input validation later
+        if(GetComponent<EnemyManager>()){
+            //do nothing
+        }else if(GetComponent<PlayerMovement>()){
+            playerName.text = inputName.text;
+        }else{
+            Debug.Log("no script found");
+        }
+        
         if(GetComponent<EnemyManager>()){
             GetComponent<EnemyManager>().enabled = true;
         }else if(GetComponent<PlayerMovement>()){
@@ -131,7 +143,8 @@ public class HealthBar : MonoBehaviour
         }else{
             Debug.Log("no script found");
         }
-        
+        inpufField.active = false;
+        fightSound.Play();
     }
 
     public void Pause(){
@@ -159,11 +172,9 @@ public class HealthBar : MonoBehaviour
         gmOverText.text = "";
         transform.position = startPos; 
         playbutton.active = true; 
+        inpufField.active = true;
     }
 
-    public void BeforeStart(){
-        
-    }
 
 
 
